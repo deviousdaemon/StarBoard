@@ -1,0 +1,92 @@
+[gd_scene load_steps=10 format=3 uid="uid://dh2bvpbo2uosb"]
+
+[ext_resource type="Script" path="res://scripts/card.gd" id="1_brwg4"]
+[ext_resource type="Texture2D" uid="uid://chp41rn0xgwyr" path="res://icons/element-plus-icons/finished.png" id="2_fosvu"]
+[ext_resource type="Texture2D" uid="uid://tmsw6kyv43dl" path="res://icons/element-plus-icons/collection-tag.png" id="3_xgfl1"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ev34i"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2ke0i"]
+bg_color = Color(1, 1, 1, 0.12549)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iq8ck"]
+bg_color = Color(0, 0, 0, 0.196078)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sqe5t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rlfwl"]
+bg_color = Color(0, 0, 0, 0.501961)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1k613"]
+bg_color = Color(1, 1, 1, 0.0352941)
+
+[node name="Card" type="PanelContainer"]
+custom_minimum_size = Vector2(0, 48)
+offset_right = 168.0
+offset_bottom = 48.0
+script = ExtResource("1_brwg4")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 2
+theme_override_constants/margin_bottom = 2
+
+[node name="Button" type="Button" parent="MarginContainer"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_ev34i")
+theme_override_styles/hover = SubResource("StyleBoxFlat_2ke0i")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_iq8ck")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_sqe5t")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer" groups=["CardTitle"]]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "I am a Card"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Complete" type="TextureRect" parent="MarginContainer/HBoxContainer" groups=["CComplete"]]
+visible = false
+layout_mode = 2
+texture = ExtResource("2_fosvu")
+stretch_mode = 5
+
+[node name="DisabledPanel" type="Panel" parent="." groups=["CDisabledPanel"]]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rlfwl")
+
+[node name="DependancyPanel" type="Panel" parent="." groups=["CDependancyPanel"]]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1k613")
+
+[node name="TextureRect" type="TextureRect" parent="DependancyPanel"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 0
+anchor_left = 0.75
+anchor_right = 1.0
+texture = ExtResource("3_xgfl1")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="DependancyPanel/TextureRect"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 41.0
+offset_bottom = 30.0
+text = "D"
+horizontal_alignment = 1
+
+[connection signal="button_down" from="MarginContainer/Button" to="." method="button_down"]
+[connection signal="button_up" from="MarginContainer/Button" to="." method="button_up"]
+[connection signal="pressed" from="MarginContainer/Button" to="." method="button_pressed"]

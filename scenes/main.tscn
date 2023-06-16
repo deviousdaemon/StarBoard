@@ -1,0 +1,226 @@
+[gd_scene load_steps=17 format=3 uid="uid://cdxn8jyyb1msa"]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_28vih"]
+[ext_resource type="Script" path="res://scripts/tab_controller.gd" id="2_j48x0"]
+[ext_resource type="PackedScene" uid="uid://qumjapfpcjrg" path="res://scenes/card_editor.tscn" id="2_ju0km"]
+[ext_resource type="Script" path="res://scripts/input_blocker.gd" id="2_ux4gt"]
+[ext_resource type="PackedScene" uid="uid://02y43xc54xfe" path="res://scenes/new_project_prompt.tscn" id="3_454tv"]
+[ext_resource type="Script" path="res://scripts/file_dialog.gd" id="6_efjky"]
+[ext_resource type="FontFile" uid="uid://b7dwnhyemxg2i" path="res://fonts/source/FiraCode-SemiBold.ttf" id="7_figmt"]
+[ext_resource type="FontFile" uid="uid://nhk1pdo4600k" path="res://fonts/source/FiraCode-Regular.ttf" id="8_wppft"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_symdg"]
+bg_color = Color(0.4, 0.54902, 0.6, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x87x1"]
+content_margin_bottom = 0.0
+bg_color = Color(0.192157, 0.27451, 0.309804, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_knddj"]
+content_margin_left = 8.0
+content_margin_top = 2.0
+content_margin_right = 8.0
+content_margin_bottom = 2.0
+bg_color = Color(0.298039, 0.34902, 0.415686, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+anti_aliasing = false
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5yp1g"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3iqma"]
+bg_color = Color(0.141176, 0.211765, 0.239216, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v17ew"]
+bg_color = Color(0.219608, 0.278431, 0.298039, 1)
+
+[sub_resource type="FontVariation" id="FontVariation_nu5qe"]
+base_font = ExtResource("7_figmt")
+
+[sub_resource type="FontVariation" id="FontVariation_88qrh"]
+base_font = ExtResource("8_wppft")
+
+[node name="Main" type="Panel"]
+process_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_symdg")
+script = ExtResource("1_28vih")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 0
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_x87x1")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="FileMenu" type="MenuButton" parent="VBoxContainer/PanelContainer/HBoxContainer" groups=["FileMenu"]]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_knddj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5yp1g")
+text = "File"
+flat = false
+
+[node name="EditMenu" type="MenuButton" parent="VBoxContainer/PanelContainer/HBoxContainer" groups=["EditMenu"]]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_knddj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5yp1g")
+text = "Edit"
+flat = false
+
+[node name="HelpMenu" type="MenuButton" parent="VBoxContainer/PanelContainer/HBoxContainer" groups=["HelpMenu"]]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_knddj")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_5yp1g")
+text = "Help"
+flat = false
+
+[node name="Panel" type="Panel" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 2)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_3iqma")
+
+[node name="PanelContainer2" type="PanelContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v17ew")
+
+[node name="TabController" type="TabContainer" parent="VBoxContainer/PanelContainer2"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_v17ew")
+script = ExtResource("2_j48x0")
+
+[node name="InputBlocker" type="Control" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 1
+script = ExtResource("2_ux4gt")
+
+[node name="CardEditor" parent="InputBlocker" instance=ExtResource("2_ju0km")]
+visible = false
+layout_mode = 1
+anchor_left = 0.2
+anchor_top = 0.1
+anchor_right = 0.8
+anchor_bottom = 0.9
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="NewProjectPrompt" parent="InputBlocker" instance=ExtResource("3_454tv")]
+visible = false
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 1
+anchors_preset = 8
+offset_left = -128.0
+offset_top = -51.0
+offset_right = 128.0
+offset_bottom = 51.0
+
+[node name="PortableModePrompt" type="PanelContainer" parent="InputBlocker" groups=["MPortableModePrompt"]]
+visible = false
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -181.0
+offset_top = -136.0
+offset_right = 181.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="InputBlocker/PortableModePrompt"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="VBoxContainer" type="VBoxContainer" parent="InputBlocker/PortableModePrompt/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_nu5qe")
+text = "Would you like to use portable mode?"
+
+[node name="HSeparator2" type="HSeparator" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label2" type="Label" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("FontVariation_88qrh")
+theme_override_font_sizes/font_size = 14
+text = "In portable mode, configuration files will be stored in the folder the executable is located in.
+Otherwise, the OS's user data directory is used (On Windows, it's:
+%APPDATA%\\StarduskStudios\\StarBoard, 
+and on Linux, it's: 
+~/.local/share/StarduskStudios/StarBoard"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HSeparator" type="HSeparator" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RunPortable" type="Button" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Yes"
+
+[node name="Control" type="Control" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RunStandard" type="Button" parent="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "No"
+
+[node name="FileDialog" type="FileDialog" parent="InputBlocker" groups=["MFileDialog"]]
+disable_3d = true
+position = Vector2i(256, 128)
+size = Vector2i(640, 448)
+min_size = Vector2i(448, 384)
+content_scale_mode = 1
+access = 2
+filters = PackedStringArray("*.sb_project ; StarBoard Project Files")
+script = ExtResource("6_efjky")
+
+[connection signal="focus_entered" from="." to="." method="focus_entered"]
+[connection signal="tab_close_requested" from="VBoxContainer/PanelContainer2/TabController" to="." method="tab_close_requested"]
+[connection signal="focus_entered" from="InputBlocker" to="InputBlocker" method="focus_entered"]
+[connection signal="create_project" from="InputBlocker/NewProjectPrompt" to="." method="create_project"]
+[connection signal="pressed" from="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer/HBoxContainer/RunPortable" to="." method="run_portable_pressed"]
+[connection signal="pressed" from="InputBlocker/PortableModePrompt/MarginContainer/VBoxContainer/HBoxContainer/RunStandard" to="." method="run_standard_pressed"]
+[connection signal="file_selected" from="InputBlocker/FileDialog" to="." method="file_dialog_file_selected"]

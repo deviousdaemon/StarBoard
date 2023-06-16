@@ -1,0 +1,86 @@
+[gd_scene load_steps=5 format=3 uid="uid://cgg0ga10n0nnj"]
+
+[ext_resource type="Script" path="res://scripts/project.gd" id="1_qlabl"]
+[ext_resource type="FontFile" uid="uid://nhk1pdo4600k" path="res://fonts/source/FiraCode-Regular.ttf" id="1_sue5i"]
+[ext_resource type="Script" path="res://scripts/action_label.gd" id="3_31uqo"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_wbwyt"]
+
+[node name="Project" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qlabl")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="BoardContainer" type="HBoxContainer" parent="VBoxContainer/MarginContainer/HBoxContainer" groups=["BoardContainer"]]
+layout_mode = 2
+
+[node name="AddBoardButton" type="Button" parent="VBoxContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "Create a Board"
+focus_mode = 0
+theme_override_fonts/font = ExtResource("1_sue5i")
+theme_override_font_sizes/font_size = 48
+theme_override_styles/focus = SubResource("StyleBoxEmpty_wbwyt")
+text = "+"
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer" groups=["PEditingDependanciesPanel"]]
+visible = false
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="StopEditingDependancies" type="Button" parent="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer"]
+layout_mode = 2
+text = "Stop Editing Dependancies"
+
+[node name="DragContainer" type="Control" parent="." groups=["PDragContainer"]]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="DragContainer"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ActionLabel" type="Label" parent="DragContainer/MarginContainer" groups=["ProjectActionLabel"]]
+layout_mode = 2
+script = ExtResource("3_31uqo")
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer/HBoxContainer/AddBoardButton" to="." method="create_board"]
+[connection signal="pressed" from="VBoxContainer/PanelContainer/MarginContainer/HBoxContainer/StopEditingDependancies" to="." method="stop_editing_dependancies_pressed"]

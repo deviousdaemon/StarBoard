@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://02y43xc54xfe"]
+
+[ext_resource type="Script" path="res://scripts/new_project_prompt.gd" id="1_asoc3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ci20x"]
+bg_color = Color(0.278431, 0.470588, 0.545098, 1)
+
+[node name="NewProjectPrompt" type="PanelContainer" groups=["NewProjectPrompt"]]
+custom_minimum_size = Vector2i(256, 0)
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ci20x")
+script = ExtResource("1_asoc3")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+offset_right = 256.0
+offset_bottom = 102.0
+mouse_filter = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 244.0
+offset_bottom = 90.0
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="LineEdit" parent="MarginContainer/VBoxContainer" groups=["NPPTitleEdit"]]
+offset_right = 232.0
+offset_bottom = 31.0
+placeholder_text = "Title"
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+offset_top = 47.0
+offset_right = 232.0
+offset_bottom = 78.0
+mouse_filter = 2
+
+[node name="Create" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+offset_right = 60.0
+offset_bottom = 31.0
+focus_mode = 0
+text = "Create"
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 64.0
+offset_right = 168.0
+offset_bottom = 31.0
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+offset_left = 172.0
+offset_right = 232.0
+offset_bottom = 31.0
+focus_mode = 0
+text = "Cancel"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Create" to="." method="create_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="cancel_pressed"]

@@ -1,0 +1,402 @@
+[gd_scene load_steps=2 format=3 uid="uid://bky5kb40ibxw7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s4efn"]
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+bg_color = Color(0.168627, 0.247059, 0.278431, 1)
+
+[node name="popup" type="Popup"]
+size = Vector2i(244, 179)
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+theme_override_styles/panel = SubResource("StyleBoxFlat_s4efn")
+
+[node name="vbox" type="VBoxContainer" parent="PanelContainer"]
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 236.0
+offset_bottom = 171.0
+
+[node name="hbox_month_year" type="HBoxContainer" parent="PanelContainer/vbox"]
+offset_right = 228.0
+offset_bottom = 31.0
+alignment = 1
+
+[node name="button_prev_month" type="Button" parent="PanelContainer/vbox/hbox_month_year"]
+offset_left = 28.0
+offset_right = 46.0
+offset_bottom = 31.0
+text = "<"
+
+[node name="button_prev_year" type="Button" parent="PanelContainer/vbox/hbox_month_year"]
+offset_left = 50.0
+offset_right = 77.0
+offset_bottom = 31.0
+text = "<<"
+
+[node name="label_month_year" type="Label" parent="PanelContainer/vbox/hbox_month_year"]
+offset_left = 81.0
+offset_top = 2.0
+offset_right = 146.0
+offset_bottom = 28.0
+text = "Jan 2016"
+
+[node name="button_next_year" type="Button" parent="PanelContainer/vbox/hbox_month_year"]
+offset_left = 150.0
+offset_right = 177.0
+offset_bottom = 31.0
+text = ">>"
+
+[node name="button_next_month" type="Button" parent="PanelContainer/vbox/hbox_month_year"]
+offset_left = 181.0
+offset_right = 199.0
+offset_bottom = 31.0
+text = ">"
+
+[node name="hbox_deadspace" type="HBoxContainer" parent="PanelContainer/vbox"]
+offset_top = 35.0
+offset_right = 228.0
+offset_bottom = 61.0
+alignment = 1
+
+[node name="label_empty" type="Label" parent="PanelContainer/vbox/hbox_deadspace"]
+offset_left = 109.0
+offset_right = 118.0
+offset_bottom = 26.0
+text = "  "
+
+[node name="hbox_label_days" type="GridContainer" parent="PanelContainer/vbox"]
+offset_top = 65.0
+offset_right = 228.0
+offset_bottom = 91.0
+columns = 7
+
+[node name="label_sunday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_right = 30.0
+offset_bottom = 26.0
+text = "Sun"
+
+[node name="label_monday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_left = 34.0
+offset_right = 69.0
+offset_bottom = 26.0
+text = "Mon"
+
+[node name="label_thuesday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_left = 73.0
+offset_right = 102.0
+offset_bottom = 26.0
+text = "Tue"
+
+[node name="label_wednesday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_left = 106.0
+offset_right = 141.0
+offset_bottom = 26.0
+text = "Wed"
+
+[node name="label_thursday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_left = 145.0
+offset_right = 175.0
+offset_bottom = 26.0
+text = "Thu"
+
+[node name="label_friday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_left = 179.0
+offset_right = 199.0
+offset_bottom = 26.0
+text = "Fri"
+
+[node name="label_saturday" type="Label" parent="PanelContainer/vbox/hbox_label_days"]
+offset_left = 203.0
+offset_right = 228.0
+offset_bottom = 26.0
+text = "Sat"
+
+[node name="hbox_days" type="GridContainer" parent="PanelContainer/vbox"]
+offset_top = 95.0
+offset_right = 228.0
+offset_bottom = 163.0
+columns = 7
+
+[node name="btn_0" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_right = 8.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_1" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 12.0
+offset_right = 20.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_2" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 24.0
+offset_right = 32.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_3" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 36.0
+offset_right = 44.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_4" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 48.0
+offset_right = 56.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_5" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 60.0
+offset_right = 68.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_6" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 72.0
+offset_right = 80.0
+offset_bottom = 8.0
+disabled = true
+
+[node name="btn_7" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_top = 12.0
+offset_right = 8.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_8" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 20.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_9" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 24.0
+offset_top = 12.0
+offset_right = 32.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_10" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 36.0
+offset_top = 12.0
+offset_right = 44.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_11" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 48.0
+offset_top = 12.0
+offset_right = 56.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_12" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 60.0
+offset_top = 12.0
+offset_right = 68.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_13" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 72.0
+offset_top = 12.0
+offset_right = 80.0
+offset_bottom = 20.0
+disabled = true
+
+[node name="btn_14" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_top = 24.0
+offset_right = 8.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_15" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 12.0
+offset_top = 24.0
+offset_right = 20.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_16" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 32.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_17" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 36.0
+offset_top = 24.0
+offset_right = 44.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_18" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 48.0
+offset_top = 24.0
+offset_right = 56.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_19" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 60.0
+offset_top = 24.0
+offset_right = 68.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_20" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 72.0
+offset_top = 24.0
+offset_right = 80.0
+offset_bottom = 32.0
+disabled = true
+
+[node name="btn_21" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_top = 36.0
+offset_right = 8.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_22" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 12.0
+offset_top = 36.0
+offset_right = 20.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_23" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 24.0
+offset_top = 36.0
+offset_right = 32.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_24" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 44.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_25" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 56.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_26" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 60.0
+offset_top = 36.0
+offset_right = 68.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_27" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 72.0
+offset_top = 36.0
+offset_right = 80.0
+offset_bottom = 44.0
+disabled = true
+
+[node name="btn_28" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_top = 48.0
+offset_right = 8.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_29" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 12.0
+offset_top = 48.0
+offset_right = 20.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_30" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 24.0
+offset_top = 48.0
+offset_right = 32.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_31" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 36.0
+offset_top = 48.0
+offset_right = 44.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_32" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 48.0
+offset_top = 48.0
+offset_right = 56.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_33" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 60.0
+offset_top = 48.0
+offset_right = 68.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_34" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 72.0
+offset_top = 48.0
+offset_right = 80.0
+offset_bottom = 56.0
+disabled = true
+
+[node name="btn_35" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_top = 60.0
+offset_right = 8.0
+offset_bottom = 68.0
+disabled = true
+
+[node name="btn_36" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 12.0
+offset_top = 60.0
+offset_right = 20.0
+offset_bottom = 68.0
+disabled = true
+
+[node name="btn_37" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 24.0
+offset_top = 60.0
+offset_right = 32.0
+offset_bottom = 68.0
+disabled = true
+
+[node name="btn_38" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 36.0
+offset_top = 60.0
+offset_right = 44.0
+offset_bottom = 68.0
+disabled = true
+
+[node name="btn_39" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 48.0
+offset_top = 60.0
+offset_right = 56.0
+offset_bottom = 68.0
+disabled = true
+
+[node name="btn_40" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 60.0
+offset_top = 60.0
+offset_right = 68.0
+offset_bottom = 68.0
+disabled = true
+
+[node name="btn_41" type="Button" parent="PanelContainer/vbox/hbox_days"]
+offset_left = 72.0
+offset_top = 60.0
+offset_right = 80.0
+offset_bottom = 68.0
+disabled = true

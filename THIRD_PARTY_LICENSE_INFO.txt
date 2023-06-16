@@ -1,0 +1,4 @@
+This software includes third party open source software components, please see their accompanying folders for additional license information, referred to below:
+
+Element Plus Icons, ./LICENSE/element-plus-icons/LICENSE.txt
+Godot Calendar Button Plugin for Godot, ./LICENSE/godot-plugin-calendar-button/LICENSE.txt
