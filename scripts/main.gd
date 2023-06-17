@@ -2,20 +2,25 @@ extends Control
 
 var project_prefab: PackedScene = preload("res://scenes/project.tscn") as PackedScene
 var recent_projects_menu := PopupMenu.new()
+var view_filter_menu := PopupMenu.new()
 var config := ConfigFile.new()
 var recent_files_shortcuts: Array[Shortcut] = []
 
 var is_quitting: bool = false
-var projects_open: Array = []
+var projects_open: Array[Project] = []
 var config_path: String = ""
 var recent_dir: String = ""
 var recent_files: Array = []
 var is_saving: bool = false
+var current_project_index: int = -1
+var is_closing_projects: bool = false
 
 @onready var file_menu: PopupMenu = (Helper.get_descendant_in_group(self, "FileMenu") as MenuButton).get_popup() as PopupMenu
+@onready var view_menu: PopupMenu = (Helper.get_descendant_in_group(self, "ViewMenu") as MenuButton).get_popup() as PopupMenu
 @onready var input_blocker: Control = $InputBlocker as Control
 @onready var tab_controller: TabController = Helper.get_descendant_of_class(self, "TabContainer") as TabController
 @onready var new_project_prompt: NewProjectPrompt = Helper.get_descendant_in_group(self, "NewProjectPrompt") as NewProjectPrompt
+@onready var ask_to_save_prompt: AskToSavePrompt = Helper.get_descendant_in_group(self, "AskToSavePrompt") as AskToSavePrompt
 @onready var card_editor: CardEditor = Helper.get_descendant_in_group(self, "CardEditor") as CardEditor
 @onready var portable_mode_prompt: Control = Helper.get_descendant_in_group(self, "MPortableModePrompt") as Control
 @onready var file_dialog: MFileDialog = Helper.get_descendant_in_group(self, "MFileDialog") as MFileDialog
@@ -32,10 +37,13 @@ func _ready() -> void:
 		initialize_config_file()
 	
 	recent_projects_menu.index_pressed.connect(recent_project_button_pressed)
-	file_menu.connect("id_pressed", file_menu_button_pressed)
+	file_menu.id_pressed.connect(file_menu_button_pressed)
+	file_dialog.get_cancel_button().pressed.connect(file_dialog_cancel_pressed)
+	ask_to_save_prompt.response_confirmed.connect(ask_to_save_prompt_response)
 #	create_shortcuts()
 	init_file_menu()
 	init_recent_files()
+	init_view_menu()
 	pass
 
 #func create_shortcuts() -> void:
@@ -52,6 +60,17 @@ func focus_entered() -> void:
 	pass # Replace with function body.
 
 func _process(delta: float) -> void:
+	if is_closing_projects:
+		if input_blocker.visible or is_saving: return
+		var project: Project = null
+		if projects_open.size() >= 1:
+			project = projects_open.back() as Project
+			tab_close_requested(project, project.get_index())
+		else:
+			is_closing_projects = false
+			quit()
+			return
+		pass
 	if is_quitting:
 		if get_child_count() == 0:
 			if is_instance_valid(Helper):
@@ -114,6 +133,17 @@ func init_file_menu() -> void:
 	file_menu.add_item("Quit")
 	pass
 
+func init_view_menu() -> void:
+	view_filter_menu.name = "view_filter"
+	view_menu.add_child(view_filter_menu)
+	view_menu.add_submenu_item("Filter View ->", "view_filter")
+	view_filter_menu.add_item("By Tag")
+	view_filter_menu.add_item("By Dependency")
+	view_filter_menu.add_item("By Due Date")
+	
+	view_filter_menu.id_pressed.connect(filter_view_button_pressed)
+	pass
+
 func init_recent_files() -> void:
 	recent_projects_menu.clear()
 	var file_list: Array = recent_files.duplicate(true)
@@ -156,7 +186,12 @@ func quit() -> void:
 	pass
 
 func quit_check() -> bool:
-	if not projects_open.is_empty(): return false
+	if not projects_open.is_empty():
+		for i in projects_open:
+			if i.modified:
+				is_closing_projects = true
+				break
+		if is_closing_projects: return false
 	return true
 
 func file_menu_button_pressed(button_id: int) -> void:
@@ -178,6 +213,19 @@ func file_menu_button_pressed(button_id: int) -> void:
 			pass
 		5: # Quit
 			quit_pressed()
+			pass
+	pass
+
+func filter_view_button_pressed(button_id: int) -> void:
+	match button_id:
+		0: # Tag
+			print(0)
+			pass
+		1: # Dependency
+			print(1)
+			pass
+		2: # Due Date
+			print(2)
 			pass
 	pass
 
@@ -228,6 +276,10 @@ func create_project(title: String, is_loaded: bool = false) -> Project:
 	
 	file_menu.set_item_disabled(3, false)
 	
+	projects_open.append(new_project)
+	current_project_index = projects_open.size() - 1
+	tab_controller.current_tab = current_project_index
+	
 	return new_project
 
 func project_modified_state_changed(is_modified: bool, project: Project) -> void:
@@ -252,11 +304,13 @@ func generate_project_name() -> String:
 	
 	return p_name
 
-func tab_close_requested(project: Project, tab_idx: int) -> void:
-	if not project.modified:
+func tab_close_requested(project: Project, tab_idx: int, force: bool = false) -> void:
+	if not project.modified or force:
 		tab_controller.close_tab(tab_idx)
+		projects_open.remove_at(tab_idx)
 	else:
-		# TODO ask to save
+		tab_controller.current_tab = tab_idx
+		ask_to_save_prompt.open(project, tab_idx)
 		pass
 	pass # Replace with function body.
 
@@ -286,6 +340,10 @@ func initialize_config_file() -> void:
 		recent_dir = config.get_value("app", "recent_dir", "")
 		
 	config.save(config_path)
+	pass
+
+func file_dialog_cancel_pressed() -> void:
+	if is_closing_projects: is_closing_projects = false
 	pass
 
 func file_dialog_file_selected(path: String = "") -> void:
@@ -324,7 +382,19 @@ func file_dialog_file_selected(path: String = "") -> void:
 		pass
 	pass # Replace with function body.
 
-
+func ask_to_save_prompt_response(response: int, project: Project, tab_index: int) -> void:
+	match response:
+		0: # Save
+			save_project_pressed()
+			tab_close_requested(project, tab_index)
+			pass
+		1: # Discard
+			tab_close_requested(project, tab_index, true)
+			pass
+		2: # Cancel
+			is_closing_projects = false
+			pass
+	pass
 
 
 

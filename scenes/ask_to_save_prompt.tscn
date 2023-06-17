@@ -1,0 +1,81 @@
+[gd_scene load_steps=3 format=3 uid="uid://cmvv71oiqoys6"]
+
+[ext_resource type="Script" path="res://scripts/ask_to_save_prompt.gd" id="1_0fcck"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ci20x"]
+bg_color = Color(0.278431, 0.470588, 0.545098, 1)
+
+[node name="AskToSavePrompt" type="PanelContainer" groups=["AskToSavePrompt"]]
+custom_minimum_size = Vector2(256, 0)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ci20x")
+script = ExtResource("1_0fcck")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 16
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(256, 0)
+layout_mode = 2
+text = "Would you like to save before closing?"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Save"
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Discard" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Discard"
+
+[node name="Control2" type="Control" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(72, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Cancel"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Save" to="." method="save_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Discard" to="." method="discard_pressed"]
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/Cancel" to="." method="cancel_pressed"]

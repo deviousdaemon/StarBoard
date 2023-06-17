@@ -4,6 +4,7 @@ class_name Project
 signal open_card(this, card, tags)
 signal toggle_dependancy(card)
 signal modified_state_changed(modified)
+signal tags_modified(tags)
 
 var board_prefab: PackedScene = load("res://scenes/board.tscn") as PackedScene
 
@@ -329,6 +330,7 @@ func card_tag_added(card: Card, tag: String) -> void:
 	tags = new_tags
 	card_editor.current_tags = new_tags
 	update_cards_tags(card)
+	tags_modified.emit(tags)
 	pass
 
 func card_tag_updated(card: Card, old_tag: String, new_tag) -> void:
@@ -354,6 +356,7 @@ func card_tag_updated(card: Card, old_tag: String, new_tag) -> void:
 	tags = new_tags
 	card_editor.current_tags = new_tags
 	update_cards_tags(card)
+	tags_modified.emit(tags)
 	pass
 
 func card_tag_removed(card: Card, tag: String) -> void:
@@ -375,6 +378,7 @@ func card_tag_removed(card: Card, tag: String) -> void:
 	tags = new_tags
 	card_editor.current_tags = new_tags
 	update_cards_tags(card)
+	tags_modified.emit(tags)
 	pass
 
 func update_cards_tags(card: Card) -> void:

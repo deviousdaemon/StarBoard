@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://cdxn8jyyb1msa"]
+[gd_scene load_steps=18 format=3 uid="uid://cdxn8jyyb1msa"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_28vih"]
 [ext_resource type="Script" path="res://scripts/tab_controller.gd" id="2_j48x0"]
 [ext_resource type="PackedScene" uid="uid://qumjapfpcjrg" path="res://scenes/card_editor.tscn" id="2_ju0km"]
 [ext_resource type="Script" path="res://scripts/input_blocker.gd" id="2_ux4gt"]
 [ext_resource type="PackedScene" uid="uid://02y43xc54xfe" path="res://scenes/new_project_prompt.tscn" id="3_454tv"]
+[ext_resource type="PackedScene" uid="uid://cmvv71oiqoys6" path="res://scenes/ask_to_save_prompt.tscn" id="5_dksbx"]
 [ext_resource type="Script" path="res://scripts/file_dialog.gd" id="6_efjky"]
 [ext_resource type="FontFile" uid="uid://b7dwnhyemxg2i" path="res://fonts/source/FiraCode-SemiBold.ttf" id="7_figmt"]
 [ext_resource type="FontFile" uid="uid://nhk1pdo4600k" path="res://fonts/source/FiraCode-Regular.ttf" id="8_wppft"]
@@ -78,11 +79,11 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_5yp1g")
 text = "File"
 flat = false
 
-[node name="EditMenu" type="MenuButton" parent="VBoxContainer/PanelContainer/HBoxContainer" groups=["EditMenu"]]
+[node name="ViewMenu" type="MenuButton" parent="VBoxContainer/PanelContainer/HBoxContainer" groups=["ViewMenu"]]
 layout_mode = 2
 theme_override_styles/normal = SubResource("StyleBoxFlat_knddj")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_5yp1g")
-text = "Edit"
+text = "View"
 flat = false
 
 [node name="HelpMenu" type="MenuButton" parent="VBoxContainer/PanelContainer/HBoxContainer" groups=["HelpMenu"]]
@@ -129,6 +130,14 @@ anchor_right = 0.8
 anchor_bottom = 0.9
 grow_horizontal = 1
 grow_vertical = 1
+
+[node name="AskToSavePrompt" parent="InputBlocker" instance=ExtResource("5_dksbx")]
+visible = false
+layout_mode = 1
+offset_left = -162.5
+offset_top = -64.5
+offset_right = 162.5
+offset_bottom = 64.5
 
 [node name="NewProjectPrompt" parent="InputBlocker" instance=ExtResource("3_454tv")]
 visible = false
