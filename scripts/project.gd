@@ -231,6 +231,7 @@ func create_board(is_loaded: bool = false) -> Board:
 		board.card_drag_request.connect(card_drag_requested)
 		board_container.add_child(board)
 		boards.append(board)
+		
 		pass
 	return board
 
@@ -255,7 +256,7 @@ func card_opened(card: Card) -> void:
 	pass
 
 func do_update_card_dependancies(card: Card, dep_card: Card, new_dependancies: Array[int]) -> void:
-	print(new_dependancies)
+#	print(new_dependancies)
 	if card_editor.visible:
 		if new_dependancies.has(dep_card.card_id):
 			card.marked_dependancy = true
@@ -290,13 +291,12 @@ func card_drag_requested(card: Card) -> void:
 	pass
 
 func commit_undo_redo_action() -> void:
-	
 	undo_redo.add_do_method(set_modified.bind(true))
 	undo_redo.add_undo_method(set_modified.bind(modified))
 	set_modified(true)
 #	undo_redo.add_do_property(self, "modified", true)
 #	undo_redo.add_undo_property(self, "modified", modified)
-	undo_redo.commit_action()
+	undo_redo.commit_action(true)
 	pass
 
 func set_modified(is_modified: bool) -> void:
@@ -342,7 +342,7 @@ func card_tag_updated(card: Card, old_tag: String, new_tag) -> void:
 		if card_list.has(card): card_list.remove_at(card_list.find(card))
 		if card_list.is_empty(): new_tags.erase(old_tag)
 	if not new_tag == "":
-		if not new_tags.has(new_tag): new_tags[new_tag] = []
+		if not new_tags.has(new_tag): new_tags[new_tag] = [] as Array[Card]
 		card_list = new_tags[new_tag]
 		if not card_list.has(card): new_tags[new_tag].append(card)
 	
@@ -392,7 +392,6 @@ func update_cards_tags(card: Card) -> void:
 	undo_redo.add_undo_method(card_editor.open.bind(self, card, tags))
 	commit_undo_redo_action()
 	card.tags = c_tags
-	print(card.tags)
 	
 	card_editor.open(self, card, tags)
 	pass

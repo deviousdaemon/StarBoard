@@ -68,6 +68,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_rlfwl")
 [node name="DependancyPanel" type="Panel" parent="." groups=["CDependancyPanel"]]
 visible = false
 layout_mode = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_1k613")
 
 [node name="TextureRect" type="TextureRect" parent="DependancyPanel"]

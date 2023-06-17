@@ -36,10 +36,15 @@ func set_project(pjct: Project) -> void:
 	pass
 
 func create_card(is_loaded: bool = false) -> Card:
-	undo_redo.create_action("Create Card")
 	var card: Card = card_prefab.instantiate() as Card
 	if not is_loaded:
+		undo_redo.create_action("Create Card", UndoRedo.MERGE_DISABLE, true)
 		undo_redo.add_do_reference(card)
+#		print(card_container.name)
+		undo_redo.add_do_method(card_container.add_child.bind(card))
+		undo_redo.add_undo_method(card_container.remove_child.bind(card))
+#		card_container.add_child(card)
+		
 		card.parent_board_id = board_id
 		undo_redo.add_do_property(card, "parent_board_id", board_id)
 #		card.open_card.connect(card_opened)
@@ -48,17 +53,16 @@ func create_card(is_loaded: bool = false) -> Card:
 #		card.card_drag_request.connect(card_drag_requested)
 		undo_redo.add_do_method(card.connect.bind("card_drag_request", card_drag_requested))
 		undo_redo.add_undo_method(card.disconnect.bind("card_drag_request", card_drag_requested))
-#	if not is_loaded:
+		
 		var card_id: int = project.request_card_id()
 		card.card_id = card_id
 		undo_redo.add_do_property(card, "card_id", card_id)
 		card.card_index = card_container.get_child_count()
 		undo_redo.add_do_property(card, "card_index", card_container.get_child_count())
-	
-		undo_redo.add_do_method(card_container.add_child.bind(card))
-		undo_redo.add_undo_method(card_container.remove_child.bind(card))
-#		card_container.add_child(card)
+		
 		project.commit_undo_redo_action()
+		
+#		_check_child(card)
 	else:
 		
 		card.open_card.connect(card_opened)
@@ -68,6 +72,10 @@ func create_card(is_loaded: bool = false) -> Card:
 		card_container.add_child(card)
 		pass
 	return card
+
+#func _check_child(card: Card) -> void:
+#	await get_tree().process_frame
+#	print(card.get_parent().name)
 
 func update_cards() -> void:
 	await get_tree().process_frame
