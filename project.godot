@@ -28,6 +28,11 @@ Helper="*res://scripts/helper.gd"
 settings/stdout/verbose_stdout=true
 gdscript/warnings/native_method_override=0
 
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+
 [editor_plugins]
 
 enabled=PackedStringArray()

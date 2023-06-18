@@ -203,13 +203,33 @@ func recent_project_button_pressed(index: int) -> void:
 	file_dialog_file_selected(path)
 	pass
 
+func save_config_before_quitting() -> void:
+	var err: int = config.load(config_path)
+	if err == ERR_FILE_NOT_FOUND: return
+#		if not config.has_section_key("app", "recent_files"):
+#			config.set_value("app", "recent_files", [])
+#		if not config.has_section_key("app", "recent_dir"):
+#			config.set_value("app", "recent_dir", "")
+	elif config.load(config_path) == OK:
+		config.set_value("app", "display_index", DisplayServer.window_get_current_screen())
+		if get_window().mode == Window.MODE_MAXIMIZED:
+			config.set_value("app", "window_maximized", true)
+		else:
+			config.set_value("app", "last_window_size", get_window().size)
+			config.set_value("app", "last_window_position", get_window().position)
+		
+	config.save(config_path)
+	pass
+
 func quit_pressed() -> void:
 	if quit_check():
 		quit()
 	pass
 
 func quit() -> void:
+	save_config_before_quitting()
 	is_quitting = true
+	
 	card_editor.delete()
 	
 	for i in get_children():
@@ -445,9 +465,23 @@ func initialize_config_file() -> void:
 			config.set_value("app", "recent_files", [])
 		if not config.has_section_key("app", "recent_dir"):
 			config.set_value("app", "recent_dir", "")
+		if not config.has_section_key("app", "last_window_size"):
+			config.set_value("app", "last_window_size", Vector2i(1280, 720))
+		if not config.has_section_key("app", "last_window_position"):
+			config.set_value("app", "last_window_position", (DisplayServer.screen_get_size() - Vector2i(1280, 720)) / 2)
+		if not config.has_section_key("app", "window_maximized"):
+			config.set_value("app", "window_maximized", false)
+		if not config.has_section_key("app", "display_index"):
+			config.set_value("app", "display_index", DisplayServer.window_get_current_screen())
 	elif config.load(config_path) == OK:
 		recent_files = config.get_value("app", "recent_files", [])
 		recent_dir = config.get_value("app", "recent_dir", "")
+		get_window().current_screen = config.get_value("app", "display_index", DisplayServer.window_get_current_screen())
+		if config.get_value("app", "window_maximized", false):
+			get_window().mode = Window.MODE_MAXIMIZED
+		else:
+			get_window().size = config.get_value("app", "last_window_size", Vector2i(1280, 720))
+			get_window().position = config.get_value("app", "last_window_position", (DisplayServer.screen_get_size() - Vector2i(1280, 720)) / 2)
 		
 	config.save(config_path)
 	pass

@@ -220,6 +220,7 @@ text = "No"
 [node name="LicenseInfo" parent="InputBlocker" instance=ExtResource("9_4nijk")]
 visible = false
 layout_mode = 1
+anchors_preset = -1
 
 [node name="FileDialog" type="FileDialog" parent="InputBlocker" groups=["MFileDialog"]]
 disable_3d = true
