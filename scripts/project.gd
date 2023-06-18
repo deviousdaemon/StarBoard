@@ -181,6 +181,30 @@ func get_project_data() -> Dictionary:
 			p_data.tags[i].append(j.card_id)
 	return p_data
 
+func get_dependencies() -> Dictionary:
+	var d_cards: Dictionary = {}
+	for i in get_cards():
+		if not i.dependencies.is_empty():
+			for d in i.dependencies:
+				if not d_cards.has(str(d)):
+					d_cards[str(d)] = [i]
+				else:
+					d_cards[str(d)].append(i)
+	return d_cards
+
+func get_due_dates() -> Dictionary:
+	var dates: Dictionary = {}
+	for i in get_cards():
+		if i.due_date:
+			var d_date: Date = i.due_date
+			var d_string: String = d_date.get_date_string()
+			if not dates.has(d_string):
+				dates[d_string] = [i]
+			else:
+				dates[d_string].append(i)
+		pass
+	return dates
+
 func get_board_ids() -> Array[int]:
 	var board_ids: Array[int] = []
 	for i in boards: board_ids.append(i.board_id)

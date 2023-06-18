@@ -3,6 +3,9 @@ extends Control
 var project_prefab: PackedScene = preload("res://scenes/project.tscn") as PackedScene
 var recent_projects_menu := PopupMenu.new()
 var view_filter_menu := PopupMenu.new()
+var view_filter_tag_menu := PopupMenu.new()
+var view_filter_dependency_menu := PopupMenu.new()
+#var view_filter_due_date_menu := PopupMenu.new()
 var config := ConfigFile.new()
 var recent_files_shortcuts: Array[Shortcut] = []
 
@@ -14,9 +17,11 @@ var recent_files: Array = []
 var is_saving: bool = false
 var current_project_index: int = -1
 var is_closing_projects: bool = false
+var current_tags: Dictionary = {}
 
 @onready var file_menu: PopupMenu = (Helper.get_descendant_in_group(self, "FileMenu") as MenuButton).get_popup() as PopupMenu
-@onready var view_menu: PopupMenu = (Helper.get_descendant_in_group(self, "ViewMenu") as MenuButton).get_popup() as PopupMenu
+@onready var view_menu_button: MenuButton = Helper.get_descendant_in_group(self, "ViewMenu") as MenuButton as MenuButton
+@onready var view_menu: PopupMenu = view_menu_button.get_popup() as PopupMenu
 @onready var input_blocker: Control = $InputBlocker as Control
 @onready var tab_controller: TabController = Helper.get_descendant_of_class(self, "TabContainer") as TabController
 @onready var new_project_prompt: NewProjectPrompt = Helper.get_descendant_in_group(self, "NewProjectPrompt") as NewProjectPrompt
@@ -38,6 +43,8 @@ func _ready() -> void:
 	
 	recent_projects_menu.index_pressed.connect(recent_project_button_pressed)
 	file_menu.id_pressed.connect(file_menu_button_pressed)
+	view_menu_button.pressed.connect(view_menu_pressed)
+	view_menu.id_pressed.connect(view_menu_button_pressed)
 	file_dialog.get_cancel_button().pressed.connect(file_dialog_cancel_pressed)
 	ask_to_save_prompt.response_confirmed.connect(ask_to_save_prompt_response)
 #	create_shortcuts()
@@ -59,7 +66,7 @@ func focus_entered() -> void:
 	release_focus()
 	pass # Replace with function body.
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_closing_projects:
 		if input_blocker.visible or is_saving: return
 		var project: Project = null
@@ -136,12 +143,31 @@ func init_file_menu() -> void:
 func init_view_menu() -> void:
 	view_filter_menu.name = "view_filter"
 	view_menu.add_child(view_filter_menu)
-	view_menu.add_submenu_item("Filter View ->", "view_filter")
-	view_filter_menu.add_item("By Tag")
-	view_filter_menu.add_item("By Dependency")
-	view_filter_menu.add_item("By Due Date")
+	view_menu.add_submenu_item("Filter View", "view_filter")
 	
-	view_filter_menu.id_pressed.connect(filter_view_button_pressed)
+	view_filter_tag_menu.name = "filter_tag"
+	view_filter_dependency_menu.name = "filter_dependency"
+#	view_filter_due_date_menu.name = "filter_due_date"
+	
+	view_filter_menu.add_child(view_filter_tag_menu)
+	view_filter_menu.add_submenu_item("Tag", "filter_tag")
+	view_filter_menu.add_child(view_filter_dependency_menu)
+	view_filter_menu.add_submenu_item("Dependency", "filter_dependency")
+#	view_filter_menu.add_child(view_filter_due_date_menu)
+#	view_filter_menu.add_submenu_item("Due Date", "filter_due_date")
+	
+	view_filter_tag_menu.id_pressed.connect(filter_view_button_pressed.bind(0))
+	view_filter_dependency_menu.id_pressed.connect(filter_view_button_pressed.bind(1))
+#	view_filter_due_date_menu.id_pressed.connect(filter_view_button_pressed.bind(2))
+	
+	
+	view_menu.add_item("Reset View")
+	
+#	view_filter_menu.add_item("By Tag")
+#	view_filter_menu.add_item("By Dependency")
+#	view_filter_menu.add_item("By Due Date")
+#
+#	view_filter_menu.id_pressed.connect(filter_view_button_pressed)
 	pass
 
 func init_recent_files() -> void:
@@ -216,17 +242,86 @@ func file_menu_button_pressed(button_id: int) -> void:
 			pass
 	pass
 
-func filter_view_button_pressed(button_id: int) -> void:
+func view_menu_button_pressed(button_id: int) -> void:
 	match button_id:
+		0: #View filter
+			pass
+		1: # Reset View
+			clear_view_filter()
+			pass
+	pass
+
+func view_menu_pressed() -> void:
+	var max_characters: int = 32
+	view_filter_tag_menu.clear()
+#	view_filter_due_date_menu.clear()
+	view_filter_dependency_menu.clear()
+	view_filter_menu.set_item_disabled(0, true)
+	view_filter_menu.set_item_disabled(1, true)
+	if projects_open.is_empty(): return
+#	match button_id:
+#		0: # Filter View
+	# Populate Sub Menus
+	var project: Project = projects_open[tab_controller.current_tab] as Project
+	var tags: Dictionary = project.tags.duplicate(true)
+#	var due_dates: Dictionary = project.get_due_dates()
+	var dependencies: Dictionary = project.get_dependencies()
+	
+	if not tags.is_empty():
+		view_filter_menu.set_item_disabled(0, false)
+		var keys: Array = tags.keys()
+		for i in keys.size():
+			var tag: String = keys[i]
+			var cards: Array = tags[tag]
+			view_filter_tag_menu.add_item(tag.capitalize(), i)
+			view_filter_tag_menu.set_item_metadata(i, cards)
+	if not dependencies.is_empty():
+		view_filter_menu.set_item_disabled(1, false)
+		var keys: Array = dependencies.keys()
+		for i in keys.size():
+			var d_card: Card = project.get_card_by_id(int(keys[i]))
+			var o_cards: Array = dependencies[keys[i]]
+			var title: String = d_card.get_title()
+			if title.length() > max_characters:
+				title = title.substr(0, max_characters - 3) + "..."
+			view_filter_dependency_menu.add_item(title, i)
+			view_filter_dependency_menu.set_item_metadata(i, o_cards)
+			pass
+#			if not due_dates.is_empty():
+#
+#				pass
+	pass
+
+func filter_view_button_pressed(button_id: int, filter_type: int) -> void:
+	clear_view_filter()
+	var project: Project = projects_open[current_project_index]
+	match filter_type:
 		0: # Tag
-			print(0)
+#			var tag: String = view_filter_tag_menu.get_item_text(button_id)
+			var cards: Array = view_filter_tag_menu.get_item_metadata(button_id)
+			for i in project.get_cards():
+				if not cards.has(i): i.hide()
+				pass
 			pass
 		1: # Dependency
-			print(1)
+			var cards: Array = view_filter_tag_menu.get_item_metadata(button_id)
+			for i in project.get_cards():
+				if not cards.has(i): i.hide()
+				pass
 			pass
-		2: # Due Date
-			print(2)
-			pass
+#		2: # Due Date
+#			var tag: String = view_filter_tag_menu.get_item_text(button_id)
+#			var cards: Array[Card] = view_filter_tag_menu.get_item_metadata(button_id)
+#			pass
+	pass
+
+func clear_view_filter() -> void:
+	if projects_open.is_empty(): return
+	if current_project_index >= projects_open.size(): return
+	var project: Project = projects_open[current_project_index]
+	for i in project.get_cards():
+		i.visible = true
+		pass
 	pass
 
 func open_project_pressed() -> void:
@@ -280,6 +375,8 @@ func create_project(title: String, is_loaded: bool = false) -> Project:
 	current_project_index = projects_open.size() - 1
 	tab_controller.current_tab = current_project_index
 	
+	clear_view_filter()
+	
 	return new_project
 
 func project_modified_state_changed(is_modified: bool, project: Project) -> void:
@@ -303,6 +400,11 @@ func generate_project_name() -> String:
 		pass
 	
 	return p_name
+
+func tab_changed(tab: int) -> void:
+	current_project_index = tab
+	clear_view_filter()
+	pass # Replace with function body.
 
 func tab_close_requested(project: Project, tab_idx: int, force: bool = false) -> void:
 	if not project.modified or force:
@@ -361,6 +463,7 @@ func file_dialog_file_selected(path: String = "") -> void:
 			if !recent_files.has(path):
 				recent_files.append(path)
 			c_project.set_modified(false)
+			is_saving = false
 	else:
 		var file := FileAccess.open(path, FileAccess.READ)
 		if file.get_error() == OK:
@@ -395,6 +498,9 @@ func ask_to_save_prompt_response(response: int, project: Project, tab_index: int
 			is_closing_projects = false
 			pass
 	pass
+
+
+
 
 
 

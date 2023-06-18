@@ -227,6 +227,7 @@ filters = PackedStringArray("*.sb_project ; StarBoard Project Files")
 script = ExtResource("6_efjky")
 
 [connection signal="focus_entered" from="." to="." method="focus_entered"]
+[connection signal="tab_changed" from="VBoxContainer/PanelContainer2/TabController" to="." method="tab_changed"]
 [connection signal="tab_close_requested" from="VBoxContainer/PanelContainer2/TabController" to="." method="tab_close_requested"]
 [connection signal="focus_entered" from="InputBlocker" to="InputBlocker" method="focus_entered"]
 [connection signal="create_project" from="InputBlocker/NewProjectPrompt" to="." method="create_project"]

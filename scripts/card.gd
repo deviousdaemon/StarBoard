@@ -16,7 +16,7 @@ var disabled: bool = false : set = set_disabled
 var marked_dependancy: bool = false : set = set_marked_dependancy
 
 var card_id: int = -1
-var title: String = "" : set = _set_title
+var title: String = "" : set = _set_title, get = get_title
 var description: String = ""
 var complete: bool = false
 var comments: Array[String] = []
@@ -115,6 +115,8 @@ func _set_title(new_title: String) -> void:
 	title_label.text = new_title
 	pass
 
+func get_title() -> String:
+	return title 
 
 
 

@@ -35,6 +35,17 @@ func get_date_dict() -> Dictionary:
 		year=year
 	}
 
+func get_date_string(date_format: String = "DD-MM-YY") -> String:
+	if("DD".is_subsequence_of(date_format)):
+		date_format = date_format.replace("DD", str(get_day()).pad_zeros(2))
+	if("MM".is_subsequence_of(date_format)):
+		date_format = date_format.replace("MM", str(get_month()).pad_zeros(2))
+	if("YYYY".is_subsequence_of(date_format)):
+		date_format = date_format.replace("YYYY", str(get_year()))
+	elif("YY".is_subsequence_of(date_format)):
+		date_format = date_format.replace("YY", str(get_year()).substr(2,3))
+	return date_format
+
 func get_day() -> int:
 	return day
 
