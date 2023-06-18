@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cdxn8jyyb1msa"]
+[gd_scene load_steps=19 format=3 uid="uid://cdxn8jyyb1msa"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_28vih"]
 [ext_resource type="Script" path="res://scripts/tab_controller.gd" id="2_j48x0"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/file_dialog.gd" id="6_efjky"]
 [ext_resource type="FontFile" uid="uid://b7dwnhyemxg2i" path="res://fonts/source/FiraCode-SemiBold.ttf" id="7_figmt"]
 [ext_resource type="FontFile" uid="uid://nhk1pdo4600k" path="res://fonts/source/FiraCode-Regular.ttf" id="8_wppft"]
+[ext_resource type="PackedScene" uid="uid://ci80bbhth83b5" path="res://scenes/license_info_window.tscn" id="9_4nijk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_symdg"]
 bg_color = Color(0.4, 0.54902, 0.6, 1)
@@ -215,6 +216,10 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 text = "No"
+
+[node name="LicenseInfo" parent="InputBlocker" instance=ExtResource("9_4nijk")]
+visible = false
+layout_mode = 1
 
 [node name="FileDialog" type="FileDialog" parent="InputBlocker" groups=["MFileDialog"]]
 disable_3d = true

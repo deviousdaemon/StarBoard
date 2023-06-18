@@ -22,6 +22,7 @@ var current_tags: Dictionary = {}
 @onready var file_menu: PopupMenu = (Helper.get_descendant_in_group(self, "FileMenu") as MenuButton).get_popup() as PopupMenu
 @onready var view_menu_button: MenuButton = Helper.get_descendant_in_group(self, "ViewMenu") as MenuButton as MenuButton
 @onready var view_menu: PopupMenu = view_menu_button.get_popup() as PopupMenu
+@onready var help_menu: PopupMenu = (Helper.get_descendant_in_group(self, "HelpMenu") as MenuButton).get_popup() as PopupMenu
 @onready var input_blocker: Control = $InputBlocker as Control
 @onready var tab_controller: TabController = Helper.get_descendant_of_class(self, "TabContainer") as TabController
 @onready var new_project_prompt: NewProjectPrompt = Helper.get_descendant_in_group(self, "NewProjectPrompt") as NewProjectPrompt
@@ -29,6 +30,7 @@ var current_tags: Dictionary = {}
 @onready var card_editor: CardEditor = Helper.get_descendant_in_group(self, "CardEditor") as CardEditor
 @onready var portable_mode_prompt: Control = Helper.get_descendant_in_group(self, "MPortableModePrompt") as Control
 @onready var file_dialog: MFileDialog = Helper.get_descendant_in_group(self, "MFileDialog") as MFileDialog
+@onready var license_info_prompt: Control = Helper.get_descendant_in_group(self, "LicenseInfoPrompt") as Control
 
 func _ready() -> void:
 	if FileAccess.file_exists(Helper.get_executable_directory() + "sb.config"):
@@ -47,10 +49,12 @@ func _ready() -> void:
 	view_menu.id_pressed.connect(view_menu_button_pressed)
 	file_dialog.get_cancel_button().pressed.connect(file_dialog_cancel_pressed)
 	ask_to_save_prompt.response_confirmed.connect(ask_to_save_prompt_response)
+	help_menu.id_pressed.connect(help_menu_button_pressed)
 #	create_shortcuts()
 	init_file_menu()
 	init_recent_files()
 	init_view_menu()
+	init_help_menu()
 	pass
 
 #func create_shortcuts() -> void:
@@ -168,6 +172,10 @@ func init_view_menu() -> void:
 #	view_filter_menu.add_item("By Due Date")
 #
 #	view_filter_menu.id_pressed.connect(filter_view_button_pressed)
+	pass
+
+func init_help_menu() -> void:
+	help_menu.add_item("License Information")
 	pass
 
 func init_recent_files() -> void:
@@ -448,6 +456,13 @@ func file_dialog_cancel_pressed() -> void:
 	if is_closing_projects: is_closing_projects = false
 	pass
 
+func help_menu_button_pressed(button_id: int) -> void:
+	match button_id:
+		0: # License Information
+			license_info_prompt.open()
+			pass
+	pass
+
 func file_dialog_file_selected(path: String = "") -> void:
 	if path == "":
 		is_saving = false
@@ -463,7 +478,7 @@ func file_dialog_file_selected(path: String = "") -> void:
 			if !recent_files.has(path):
 				recent_files.append(path)
 			c_project.set_modified(false)
-			is_saving = false
+		is_saving = false
 	else:
 		var file := FileAccess.open(path, FileAccess.READ)
 		if file.get_error() == OK:
